@@ -34,32 +34,33 @@ Some of the features in the ACME protocol are optional. Others are mandatory but
 | -------                                      | :------------------------: | :-------------:     | :------------:     | :-------------:                        | :------------:      |
 | [(EAB) External<br />Account Binding][rfc01] | Not Needed                 | Required*           | Required           | Required                               | Required            |
 | [Multi-perspective<br />Validation][le05]    | :white_check_mark:         | :white_check_mark:  | :x:                | :x:                                    | :white_check_mark:  |
-| [Account<br />Key Rollover][rfc02]           | :white_check_mark:         | :white_check_mark:  | :x:                | :x:*                                   | :x:*                |
+| [Account<br />Key Rollover][rfc02]           | :white_check_mark:         | :white_check_mark:  | :x:                | :x:*                                   | :white_check_mark:  |
 | [Account<br />Deactivation][rfc03]           | :white_check_mark:         | :white_check_mark:  | :white_check_mark: | :white_check_mark:                     | :white_check_mark:  |
-| [Account<br />Orders][rfc04]                 | :x: *([Planned][le07])*    | :x:                 | :x:                | :x:*                                   | :x:*                |
-| [IP Address<br />Identifiers][rfc05]         | :x: *([Planned][le08])*    | :white_check_mark:* | :x:*               | :x:                                    | :x:                 |
+| [Account<br />Orders][rfc04]                 | :x: *([Planned][le07])*    | :x:                 | :x:                | :x:*                                   | :white_check_mark:  |
+| [IP Address<br />Identifiers][rfc05]         | :white_check_mark:*        | :white_check_mark:* | :x:*               | :x:                                    | :white_check_mark:* |
 | [Pre-Authorization][rfc06]                   | :x:                        | :x:                 | :x:                | :x:                                    | :x:                 |
-| [Authorization<br />Deactivation][rfc07]     | :white_check_mark:         | :white_check_mark:  | :white_check_mark: | :white_check_mark:                     | :white_check_mark:* |
-| [Cert<br />Revocation][rfc08]                | :white_check_mark:         | :white_check_mark:  | :white_check_mark: | :white_check_mark:                     | :warning:<br />*(Only via account key)* |
+| [Authorization<br />Deactivation][rfc07]     | :white_check_mark:         | :white_check_mark:  | :white_check_mark: | :white_check_mark:                     | :white_check_mark:  |
+| [Cert<br />Revocation][rfc08]                | :white_check_mark:         | :white_check_mark:  | :white_check_mark: | :white_check_mark:                     | :white_check_mark:  |
 | [Challenge<br />Retrying][rfc09]             | :x:                        | :x:                 | :white_check_mark: | :warning:<br />*(Client must request)* | :x:*                |
 | [Variable Cert Lifetime][rfc10]              | :x:                        | :white_check_mark:  | :x:                | :x:                                    | :x:                 |
 | [SXG Support][gc09]                          | :x:                        | :white_check_mark:* | :x:                | :x:                                    | :x:                 |
 | [ACME Renewal Information (ARI)][rfc11]      | :white_check_mark:         | :white_check_mark:  | :x:                | :x:                                    | :white_check_mark:  |
+| [ACME Profiles][rfc12]                       | :white_check_mark:         | :x:                 | :x:                | :x:                                    | :x:                 |
 
 
 * :white_check_mark: = Feature supported
 * :x: = Feature unsupported
 * :warning: = Feature partially supported.
 * :question: = Support unknown or untested
+* Let's Encrypt IP Address certs require using the `shortlived` profile with a client that supports ACME Profiles. [More Info][le11]
 * SSL.com throws "Missing Authentication Token" errors when making some calls against Account endpoints which is why those features are labeled Unsupported.
 * SSL.com requires an email address in the ACME account contact field, but doesn't enforce it on creation time. Instead, it throws an "badCSR" error when you try to finalize an order from an account with an empty address.
 * ZeroSSL does support IP address based certificates, but not via the ACME protocol.
 * Google's EAB credentials can only be used once to establish a new ACME account and expire after 7 days if not used. Creating additional accounts requires generating new EAB credentials.
 * Google conditionally offers IP certificates [for customers who provide a valid business need][gc10].
 * For Google SXG Certificates, you must use a different ACME directory endpoint. [https://dv-sxg.acme-v02.api.pki.goog/directory][gc08]
-* Actalis advertises the key rollover endpoint, but it throws an error.
-* Actalis account objects have the `orders` field, but it does not currently return orders for the account.
-* Actalis does not cache authorizations. Attempting to deactivate one doesn't throw an error, but is not required.
+* Actalis supports IP Address certs only on OV certs which require a paid plan.
+* Actalis does not cache authorizations. Deactivating them works but only changes their cosmetic status.
 * Actalis puts failed challenges into the `processing` status implying they will retry, but they never do. Explicit retry requests also don't seem to work.
 
 
@@ -76,6 +77,7 @@ Some of the features in the ACME protocol are optional. Others are mandatory but
 [le08]: https://letsencrypt.org/2025/07/01/issuing-our-first-ip-address-certificate
 [le09]: https://letsencrypt.status.io/
 [le10]: https://acme-v02.api.letsencrypt.org/directory
+[le11]: https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability
 [rfc00]: https://datatracker.ietf.org/doc/html/rfc8555
 [rfc01]: https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.4
 [rfc02]: https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.5
@@ -88,6 +90,7 @@ Some of the features in the ACME protocol are optional. Others are mandatory but
 [rfc09]: https://datatracker.ietf.org/doc/html/rfc8555#section-8.2
 [rfc10]: https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.3
 [rfc11]: https://datatracker.ietf.org/doc/draft-ietf-acme-ari/
+[rfc12]: https://datatracker.ietf.org/doc/draft-ietf-acme-profiles/
 [z01]: https://zerossl.com/
 [z02]: https://crt.sh/?q=c81a8bd1f9cf6d84c525f378ca1d3f8c30770e34
 [z03]: https://crt.sh/?q=d89e3bd43d5d909b47a18977aa9d5ce36cee184c
