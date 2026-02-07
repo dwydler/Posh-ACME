@@ -73,15 +73,25 @@ function New-Csr {
 
     # start building the cert request
 
+    # super lazy IPv4 address regex, but we just need to be able to
+    # distinguish from an FQDN
+    $reIPv4 = [regex]'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$'
+
     # create the subject
     if ($Order.Subject) {
         $subject = [Org.BouncyCastle.Asn1.X509.X509Name]::new($Order.Subject)
-    } elseif ($Order.MainDomain.Length -le 64) {
+    } elseif ($Order.MainDomain.Length -le 64 -and
+              $Order.MainDomain -notmatch $reIPv4 -and
+              $Order.MainDomain -notlike '*:*'
+    ) {
         $subject = [Org.BouncyCastle.Asn1.X509.X509Name]::new("CN=$($Order.MainDomain)")
     } else {
-        # CN's longer than 64 characters are invalid in a CSR, so just leave it empty
-        # because the CN value is deprecated anyway
-        $subject = [Org.BouncyCastle.Asn1.X509.X509Name]::GetInstance([Org.BouncyCastle.Asn1.DerSequence]::new())
+        # CN's longer than 64 characters are invalid in a CSR
+        # IP Addresses cannot be in the CN either
+        # So just leave it empty because the CN value is deprecated anyway
+        $subject = [Org.BouncyCastle.Asn1.X509.X509Name]::GetInstance(
+            [Org.BouncyCastle.Asn1.DerSequence]::new()
+        )
     }
 
     # create a .NET Dictionary to hold our extensions because that's what BouncyCastle needs
