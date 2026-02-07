@@ -1,7 +1,7 @@
 @{
 
 RootModule = 'Posh-ACME.psm1'
-ModuleVersion = '4.31.0'
+ModuleVersion = '4.31.1'
 GUID = '5f52d490-68dd-411c-8252-828c199a4e63'
 Author = 'Ryan Bolger'
 Copyright = '(c) 2018 Ryan Bolger. All rights reserved.'
@@ -84,11 +84,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-## 4.31.0 (2026-01-21)
+## 4.31.1 (2026-02-07)
 
-* New [Technitium DNS](https://technitium.com/dns/) plugin. (#653) (Thanks @shalafi99)
-* Added `CSR` property to the output of `Get-PACertificate` which is the path to the CSR file used for the request. (#650) (Thanks @skyblaster)
-* Fixed bug in HetznerCloud plugin due to duplicate ErrorAction param use (#656)
+* Fixed bug in CSR generation for IP address certs. IPs will no longer be added to CSR Common Name. If an IP address is the "MainDomain" of the order, the CSR CN will be empty. (#658)
 '@
 
     }

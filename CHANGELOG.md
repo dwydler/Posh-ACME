@@ -1,3 +1,7 @@
+## 4.31.1 (2026-02-07)
+
+* Fixed bug in CSR generation for IP address certs. IPs will no longer be added to CSR Common Name. If an IP address is the "MainDomain" of the order, the CSR CN will be empty. (#658)
+
 ## 4.31.0 (2026-01-21)
 
 * New [Technitium DNS](https://technitium.com/dns/) plugin. (#653) (Thanks @shalafi99)
